@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<!-- Proper rendering and touch zooming -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Movimentação Estoque</title>
+	<h:outputStylesheet library="css" name="style.css" />
+
+</h:head>
+
+
+<body>
+	<ui:composition template="/template/main.xhtml">
+
+		<ui:define name="body">
+			<h:form styleClass="formulario">
+					
+				<div class="ui-grid ui-grid-responsive">
+					<h3 style="margin-top: 0">CADASTROS DE MOVIMENTAÇÕES</h3>
+					<p:messages  globalOnly="true"/>
+
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-3">
+							<p:outputLabel value="Movimento" />
+							<p:selectOneMenu value="#{movimentoMB.movimento.tipo}"
+								required="true" style="width: 80%;">
+								<f:selectItems value="#{tipoMovimentoMB.lista}" var="tipo"
+									itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-1">
+							<p:outputLabel value="Data" />
+							<p:calendar value="#{movimentoMB.movimento.dtMovimento.time}"
+								required="true" pattern="dd/MM/yyyy" locale="pt_BR" 
+								navigator="true" showButtonPanel="true" />
+						</div>
+					</div>
+					<br />
+
+
+					<p:fieldset legend="Itens">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-2">
+								<p:outputLabel value="Produto"  for="produto"/>
+								<p:selectOneMenu style="width: 90%" id="produto" required="true"
+									value="#{movimentoMB.itemAdicao.produto}">
+									<f:selectItems value="#{movimentoMB.produtos}" var="produto" 
+										itemValue="#{produto}" itemLabel="#{produto.descricao}" />
+								</p:selectOneMenu>
+
+							</div>
+							<div class="ui-grid-col-3">
+								<p:outputLabel value="Quantidade" for="qtde" />
+								<p:spinner id="qtde" min="1"  value="#{movimentoMB.itemAdicao.qtde}" required="true"  requiredMessage="Obrigatório"/>
+								<p:message for="qtde"  />
+
+							</div>
+							<div class="ui-grid-col-2">
+								<br />
+								<p:commandButton icon=" ui-icon-circle-plus"
+									action="#{movimentoMB.adicionar}" update="@form" />
+							</div>
+						</div>
+						<br />
+						<p:dataTable value="#{movimentoMB.movimento.itens}" var="i" id="grid">
+							<p:column headerText="Produto">#{i.produto.descricao}</p:column>
+							<p:column headerText="Valor">#{i.produto.valor}</p:column>
+							<p:column headerText="Quantidade">#{i.qtde}</p:column>
+							<p:column headerText="Total">#{i.total}</p:column>
+							<p:column headerText="Remover" style="text-align:center">
+								<p:commandButton icon="ui-icon-trash"
+									action="#{movimentoMB.remover}"  immediate="true" oncomplete="PF('dialogRemove').show()">
+									<f:setPropertyActionListener
+										target="#{movimentoMB.itemRemocao}" value="#{i}" />
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+					</p:fieldset>
+					
+					<p:confirmDialog widgetVar="dialogRemove" id="dialogRemove" message="Deseja remover o item? #{movimentoMB.itemRemocao}">
+							<div style="text-align: center;">
+								<p:commandButton value="Sim" update="grid" oncomplete="PF('dialogRemove').hide()"/>
+								<p:commandButton value="Não" onclick="PF('dialogRemove').hide()" type="button"/>
+							</div>
+					</p:confirmDialog>
+				</div>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</body>
+</html>

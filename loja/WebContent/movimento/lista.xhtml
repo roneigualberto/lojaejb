@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<!-- Proper rendering and touch zooming -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Movimentos</title>
+	<h:outputStylesheet library="css" name="style.css" />
+
+</h:head>
+
+
+<body>
+	<ui:composition template="/template/main.xhtml">
+
+		<ui:define name="body">
+			<h:form styleClass="formulario">
+
+				<div class="ui-grid ui-grid-responsive">
+					<p:fieldset legend="Movimentos">
+						<div class="ui-grid-row"></div> 
+						<p:button href="/exporta/movimentos.xml"  value="EXPORTAR" target="_blank"></p:button>
+						<br />
+						<p:dataTable value="#{movimentoListMB.movimentos}" var="m"
+							id="grid">
+							<p:column headerText="Tipo">#{m.tipo.descricao}</p:column>
+							<p:column headerText="Data">
+								<h:outputText value="#{m.dtMovimento.time}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+					</p:fieldset>
+				</div>
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</body>
+</html>
