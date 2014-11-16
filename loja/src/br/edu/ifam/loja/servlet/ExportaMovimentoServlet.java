@@ -26,6 +26,8 @@ public class ExportaMovimentoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private MovimentoDAO dao;
+	
+	private static final String APPLICATION_XML = "application/xml";
 
 	@Override
 	protected void service(HttpServletRequest request,
@@ -41,7 +43,7 @@ public class ExportaMovimentoServlet extends HttpServlet {
 
 			marshaller.marshal(new Movimentos(movimentos),
 					response.getOutputStream());
-			response.setContentType("application/xml");
+			response.setContentType(APPLICATION_XML);
 
 		} catch (JAXBException e) {
 
